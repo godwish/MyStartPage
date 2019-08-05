@@ -1,0 +1,13 @@
+{
+    "category_add" : "Add Category",
+    "save" : "Save",
+    "category_edit" : "Edit Category",
+    "category_name" : "Name",
+    "category_btn_confirm" : "Confirm",
+    "category_btn_cancel" : "Cancel",
+    "site_edit" : "Edit Site",
+    "site_name" : "Name",
+    "site_url" : "Url",
+    "site_btn_confirm" : "Confirm",
+    "site_btn_cancel" : "Cancel"
+}
