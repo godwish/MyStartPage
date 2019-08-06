@@ -12,17 +12,17 @@ $base64 = file_get_contents("site_data.json");
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
   var json_data = '<? echo $base64; ?>';
-  var arr_color = [
-		"blue.gif",
-		"pink.gif",
-		"orange.gif",
-		"green.gif",
-		"purple.gif",
+  var gradient = [
+    "#86c6e2,#429cc5",
+    "#ef92a7,#eb787c",
+    "#f0b341,#eb9b1d",
+    "#73d1d7,#4bb8be",
+    "#b290e0,#916cc8"
 	];
   var cnt_color = 0;
   function MakeLink(name,url){ return '<li><a href="'+url+'" target="_blank">'+name+'</a></li>'; }
   function MakePortlet(data){
-    var ret = '<div class="portlet"><div class="portlet-header" style="background-image:url('+"'addition/"+arr_color[cnt_color++%5]+"'"+')">'+data[0]+'</div><div class="portlet-content"><ul id="bookmark" class="connectedSortable">';
+    var ret = '<div class="portlet"><div class="portlet-header" style="background-image: linear-gradient('+gradient[cnt_color++%5]+')" >'+data[0]+'</div><div class="portlet-content"><ul id="bookmark" class="connectedSortable">';
     for(var i=1;i<data.length;++i) ret = ret + MakeLink(data[i][0],data[i][1]);
     return ret + '</ul></div></div>';
   }

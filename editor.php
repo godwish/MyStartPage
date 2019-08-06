@@ -59,15 +59,7 @@ $locale = json_decode(file_get_contents("addition/locale_".$locale.".json"),true
         stop: function(){ is_drag=false; }  
       }
     );
-    $( "#bookmark, #bookmark2" ).sortable(
-      {
-        connectWith: ".connectedSortable",
-        revert: true,
-        start: function(){ time_push = new Date().getTime(); is_drag=true },
-        stop: function(){ is_drag=false; } 
-      }
-    );
-    $( "ul, li" ).disableSelection();
+    InitElement();
   }
   function MakeContents(json_data){
     var contents = "";
@@ -93,10 +85,21 @@ $locale = json_decode(file_get_contents("addition/locale_".$locale.".json"),true
     if(!IsClick()) return;
     $(obj).parent().remove();
   }
+  function InitElement(){
+    $( "#bookmark, #bookmark2" ).sortable(
+      {
+        connectWith: ".connectedSortable",
+        revert: true,
+        placeholder: "item-placeholder ui-corner-all",
+        start: function(){ time_push = new Date().getTime(); is_drag=true },
+        stop: function(){ is_drag=false; } 
+      }
+    );
+    $( "ul, li" ).disableSelection();
+  }
   function InsertPortlet(){
     $( $("body").find(".column")[0] ).append(MakePortlet(new Array("New Category")));
-    $( "#bookmark, #bookmark2" ).sortable({ connectWith: ".connectedSortable", revert: true });
-    $( "ul, li" ).disableSelection();
+    InitElement();
   }
   function Save(){
     var columns = $("body").find(".column");
