@@ -24,3 +24,5 @@ You can drag the item you want to move and place it where you want. (site, categ
 The part you want to modify can be modified using the editing function.
 
 You can add/modify localization files directly to the addition folder. You can change the language by modifying the source.
+
+You can change the title or language setting by modifying the setting.php file.
