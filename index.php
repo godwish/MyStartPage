@@ -6,10 +6,11 @@ $base64 = file_get_contents("site_data.json");
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><? echo $name_title; ?></title>
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="design.css" type="text/css" />
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="base64js.min.js"></script>
 <script>
   var json_data = '<? echo $base64; ?>';
   var gradient = [
@@ -21,9 +22,13 @@ $base64 = file_get_contents("site_data.json");
 	];
   var cnt_color = 0;
   function MakeLink(name,url){ return '<li><a href="'+url+'" target="_blank">'+name+'</a></li>'; }
+  function Base64Decode(str, encoding = 'utf-8') {
+    var bytes = base64js.toByteArray(str);
+    return decodeURIComponent(new (TextDecoder || TextDecoderLite)(encoding).decode(bytes));
+}
   function MakePortlet(data){
     var ret = '<div class="portlet"><div class="portlet-header" style="background-image: linear-gradient('+gradient[cnt_color++%5]+')" >'+data[0]+'</div><div class="portlet-content"><ul id="bookmark" class="connectedSortable">';
-    for(var i=1;i<data.length;++i) ret = ret + MakeLink(data[i][0],data[i][1]);
+    for(var i=1;i<data.length;++i) ret = ret + MakeLink(Base64Decode(data[i][0]),Base64Decode(data[i][1]));
     return ret + '</ul></div></div>';
   }
   function ApplyEffects(){

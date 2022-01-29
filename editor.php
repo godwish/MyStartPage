@@ -13,6 +13,7 @@ $locale = json_decode(file_get_contents("addition/locale_".$locale.".json"),true
   <link rel="stylesheet" href="design.css" type="text/css" />
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="base64js.min.js"></script>
 <script>
   var json_data = '<? echo $base64; ?>';
   var dialog_category;
@@ -45,7 +46,7 @@ $locale = json_decode(file_get_contents("addition/locale_".$locale.".json"),true
   function MakeLink(name,url){ return '<li><span class="site_item" data-url="'+url+'"><a href="#" onclick="ModifyItem(this);">'+name+'</a></span> <a href="#" onclick="DeleteItem(this);">[-]</a></li>'; }
   function MakePortlet(data){
     var ret = '<div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><div class="portlet-header ui-widget-header ui-corner-all"><a href="#" onclick="ModifyCategory(this);"><span class="site_category">'+data[0]+'</span></a> <a href="#" onclick="DeletePortlet(this);">[-]</a><a href="#" onclick="InsertItem(this);">[+]</a></div><div class="portlet-content"><ul id="bookmark" class="connectedSortable">';
-    for(var i=1;i<data.length;++i) ret = ret + MakeLink(data[i][0],data[i][1]);
+    for(var i=1;i<data.length;++i) ret = ret + MakeLink(Base64Decode(data[i][0]),Base64Decode(data[i][1]));
     return ret + '</ul></div></div>';
   }
   function ApplyEffects(){
@@ -59,7 +60,16 @@ $locale = json_decode(file_get_contents("addition/locale_".$locale.".json"),true
         stop: function(){ is_drag=false; }  
       }
     );
-    InitElement();
+    $( "#bookmark, #bookmark2" ).sortable(
+      {
+        connectWith: ".connectedSortable",
+        revert: true,
+        placeholder: "item-placeholder ui-corner-all",
+        start: function(){ time_push = new Date().getTime(); is_drag=true },
+        stop: function(){ is_drag=false; } 
+      }
+    );
+    $( "ul, li" ).disableSelection();
   }
   function MakeContents(json_data){
     var contents = "";
@@ -85,22 +95,19 @@ $locale = json_decode(file_get_contents("addition/locale_".$locale.".json"),true
     if(!IsClick()) return;
     $(obj).parent().remove();
   }
-  function InitElement(){
-    $( "#bookmark, #bookmark2" ).sortable(
-      {
-        connectWith: ".connectedSortable",
-        revert: true,
-        placeholder: "item-placeholder ui-corner-all",
-        start: function(){ time_push = new Date().getTime(); is_drag=true },
-        stop: function(){ is_drag=false; } 
-      }
-    );
-    $( "ul, li" ).disableSelection();
-  }
   function InsertPortlet(){
     $( $("body").find(".column")[0] ).append(MakePortlet(new Array("New Category")));
-    InitElement();
+    $( "#bookmark, #bookmark2" ).sortable({ connectWith: ".connectedSortable", revert: true });
+    $( "ul, li" ).disableSelection();
   }
+  function Base64Encode(str, encoding = 'utf-8') {
+    var bytes = new (TextEncoder || TextEncoderLite)(encoding).encode(encodeURIComponent(str));        
+    return base64js.fromByteArray(bytes);
+}
+function Base64Decode(str, encoding = 'utf-8') {
+    var bytes = base64js.toByteArray(str);
+    return decodeURIComponent(new (TextDecoder || TextDecoderLite)(encoding).decode(bytes));
+}
   function Save(){
     var columns = $("body").find(".column");
     var data = new Array();
@@ -115,8 +122,8 @@ $locale = json_decode(file_get_contents("addition/locale_".$locale.".json"),true
         for(var c=0;c<lis.length;++c){
           var item = $(lis[c]).find('span');
           data[i][j][c+1] = new Array();
-          data[i][j][c+1][0] = $($(item).find('a')[0]).html();
-          data[i][j][c+1][1] = $(item).data("url");
+          data[i][j][c+1][0] = Base64Encode($($(item).find('a')[0]).html());
+          data[i][j][c+1][1] = Base64Encode($(item).data("url"));
         }
       }
     }
