@@ -1,4 +1,5 @@
 # MyStartPage
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/godwish83/5)
 
 MyStart Page is your own shortcut.
 
