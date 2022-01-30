@@ -1,6 +1,7 @@
 # MyStartPage
 [![PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/godwish83/5)
-
+![GitHub](https://img.shields.io/github/license/godwish/MyStartPage)
+<br>
 MyStart Page is your own shortcut.
 
 It's a dashboard.
